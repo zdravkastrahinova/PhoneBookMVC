@@ -131,7 +131,7 @@ namespace PhoneBookMVC.Controllers
             UnitOfWork unitOfWork = new UnitOfWork();
             ContactsService contactsService = new ContactsService(unitOfWork);
 
-            contactsService.UpdateContactGroups(contactsService.GetByID(id.Value), null);
+            contactsService.GetByID(id.Value).Groups.Clear();
             contactsService.Delete(id.Value);
 
             return RedirectToAction("List");

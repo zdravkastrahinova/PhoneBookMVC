@@ -112,8 +112,11 @@ namespace PhoneBookMVC.Controllers
             {
                 return RedirectToAction("List");
             }
-            
-            GroupsService groupsService = new GroupsService();
+
+            UnitOfWork unitOfWork = new UnitOfWork();
+            GroupsService groupsService = new GroupsService(unitOfWork);
+
+            groupsService.GetByID(id.Value).Contacts.Clear();
             groupsService.Delete(id.Value);
 
             return RedirectToAction("List");
@@ -123,14 +126,10 @@ namespace PhoneBookMVC.Controllers
         {
             UnitOfWork unitOfWork = new UnitOfWork();
             GroupsService groupsService = new GroupsService(unitOfWork);
+
             Group group = groupsService.GetByID(groupID);
-
-            if (group == null)
-            {
-                return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
-            }
-
             group.Contacts = group.Contacts.Where(c => c.ID != contactID).ToList();
+
             groupsService.Save(group);
 
             return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
