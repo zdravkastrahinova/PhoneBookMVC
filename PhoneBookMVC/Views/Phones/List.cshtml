@@ -1,0 +1,48 @@
+﻿@model PhoneBookMVC.ViewModels.PhonesVM.PhonesListVM
+
+@{
+    ViewBag.Title = "List Phones";
+}
+
+<h3>@ViewBag.Title</h3>
+<h4>@Model.Contact.FirstName @Model.Contact.LastName</h4>
+
+<p>
+    @Html.ActionLink("Create New", "Edit", new { ContactID = Model.ContactID})
+</p>
+
+@if (Model.Phones.Count == 0)
+{
+    <div class="alert alert-info">No Phones Found</div>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>Phone Number</th>
+            <th>Phone Type</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.Phones)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneType)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "List", "Contacts")
+</div>

@@ -1,0 +1,47 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Styles for searching and pagination */
+#Search {
+    width: 50%;
+    float: left;
+}
+#Search::after, #for-page-size::after {
+    content: "";
+    float: none;
+    clear: both;
+    display: block;
+}
+#search-submit {
+    margin: 0 10px;
+}
+#PageSize {
+    width: 6%;
+}
+#for-page-size {
+    float: left;
+    padding: 7px 0;
+    margin-right: 10px;
+}
