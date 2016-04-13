@@ -16,5 +16,7 @@ namespace PhoneBookMVC.Models
 
         public virtual List<Phone> Phones { get; set; }
         public virtual List<Group> Groups { get; set; }
+
+        public string ImagePath { get; set; }
     }
 }

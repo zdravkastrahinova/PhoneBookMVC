@@ -31,5 +31,8 @@ namespace PhoneBookMVC.ViewModels.ContactsVM
 
         public IEnumerable<SelectListItem> Groups { get; set; }
         public string[] SelectedGroups { get; set; }
+
+        public string ImagePath { get; set; }
+        public HttpPostedFileBase ImageUpload { get; set; } 
     }
 }

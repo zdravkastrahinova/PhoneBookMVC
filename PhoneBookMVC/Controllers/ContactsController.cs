@@ -8,8 +8,10 @@ using PhoneBookMVC.Services.ModelServices;
 using PhoneBookMVC.ViewModels.ContactsVM;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace PhoneBookMVC.Controllers
@@ -54,11 +56,13 @@ namespace PhoneBookMVC.Controllers
         {
             ContactsService contactsService = new ContactsService();
             ContactsEditVM model = new ContactsEditVM();
+            
             Contact contact;
 
             if (!id.HasValue)
             {
                 contact = new Contact();
+                contact.ImagePath = "default.jpg";
             }
             else
             {
@@ -68,12 +72,13 @@ namespace PhoneBookMVC.Controllers
                     return RedirectToAction("List");
                 }
             }
-
+            
             model.ID = contact.ID;
+            model.UserID = contact.UserID;
+            model.ImagePath = contact.ImagePath;
             model.FirstName = contact.FirstName;
             model.LastName = contact.LastName;
             model.Address = contact.Address;
-            model.UserID = contact.UserID;
             model.Groups = contactsService.GetSelectedGroups(contact.Groups);
 
             return View(model);
@@ -103,6 +108,19 @@ namespace PhoneBookMVC.Controllers
                 }
             }
 
+            // upload picture
+            if (model.ImageUpload != null && model.ImageUpload.ContentLength > 0)
+            {
+                if (!model.ImageUpload.FileName.Contains(".jpg"))
+                {
+                    ModelState.AddModelError(string.Empty, "Wrong image format");
+                }
+
+                string filePath = Server.MapPath("~/Uploads/");
+                model.ImagePath = model.ImageUpload.FileName;
+                model.ImageUpload.SaveAs(filePath + model.ImagePath);
+            }
+
             if (!ModelState.IsValid)
             {
                 model.Groups = contactsService.GetSelectedGroups(contact.Groups, model.SelectedGroups);
@@ -114,6 +132,7 @@ namespace PhoneBookMVC.Controllers
             contact.LastName = model.LastName;
             contact.Address = model.Address;
             contact.UserID = AuthenticationService.LoggedUser.ID;
+            contact.ImagePath = model.ImagePath;
 
             contactsService.UpdateContactGroups(contact, model.SelectedGroups);
             contactsService.Save(contact);
