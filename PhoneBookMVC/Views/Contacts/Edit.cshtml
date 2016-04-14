@@ -23,9 +23,10 @@
                 <div class="form-group">
                     <img class="contact-photo" src="~/Uploads/@Model.ImagePath" alt="Image" />
                     <div class="col-md-10">
-                        @Html.TextBoxFor(model => model.ImageUpload, new { htmlAttributes = new { @class = "form-control" }, type = "file" })
+                        @Html.TextBoxFor(model => model.ImageUpload, new { htmlAttributes = new { @class = "form-control", @id = "image-upload" }, type = "file" })
                         @Html.ValidationMessageFor(model => model.ImageUpload, "", new { @class = "text-danger" })
                     </div>
+                    <input type="button" id="delete-image" data-contactID="@Model.ID" value="Delete"/>
                 </div>
             </div>
 
@@ -81,6 +82,22 @@
     @Html.ActionLink("Back to List", "List")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#delete-image').click(function () {
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("DeleteImage", "Contacts")',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ contactID: $(this).attr('data-contactID')}),
+                    dataType: "json",
+                    success: function () {
+                        $('.contact-photo').attr("src", "/Uploads/default.jpg");
+                    },
+                    error: function () { alert('error'); }
+                });
+            });
+        });
+    </script>
 }
