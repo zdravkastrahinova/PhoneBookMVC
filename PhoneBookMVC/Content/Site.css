@@ -45,7 +45,16 @@ textarea {
     padding: 7px 0;
     margin-right: 10px;
 }
-.contact-photo{
+
+/* Styles for contact image */
+.contact-photo {
     width: 200px;
     height: 200px;
+    float: left;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+#delete-image {
+    margin-left: -25px;
+    border-radius: 40%;
 }
