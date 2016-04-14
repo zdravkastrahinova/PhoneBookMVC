@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Expressions;
 
 namespace PhoneBookMVC.Controllers
 {
@@ -29,8 +30,8 @@ namespace PhoneBookMVC.Controllers
             PhonesService phonesService = new PhonesService();
             PhonesEditVM model = new PhonesEditVM();
             TryUpdateModel(model);
-            Phone phone;
 
+            Phone phone;
             if (!id.HasValue)
             {
                 phone = new Phone();
@@ -42,10 +43,10 @@ namespace PhoneBookMVC.Controllers
                 {
                     if (phonesService.GetContact(model.ContactID) == null)
                     {
-                        return RedirectToAction("List", "Contacts");
+                        return this.RedirectToAction<ContactsController>(c => c.List());
                     }
 
-                    return RedirectToAction("List", new { ContactID = model.ContactID});
+                    return this.RedirectToAction(c => c.List(), new { ContactID = model.ContactID });
                 }
                 model.ContactID = phone.ContactID;
             }
@@ -67,7 +68,7 @@ namespace PhoneBookMVC.Controllers
 
             if (phonesService.GetContact(model.ContactID) == null)
             {
-                return RedirectToAction("List", "Contacts");
+                return this.RedirectToAction<ContactsController>(c => c.List());
             }
 
             Phone phone;
@@ -80,7 +81,7 @@ namespace PhoneBookMVC.Controllers
                 phone = phonesService.GetByID(model.ID);
                 if (phone == null)
                 {
-                    return RedirectToAction("List", new { ContactID = phone.ContactID});
+                    return this.RedirectToAction(c => c.List(), new { ContactID = model.ContactID });
                 }
             }
 
@@ -93,24 +94,23 @@ namespace PhoneBookMVC.Controllers
             phone.PhoneNumber = model.PhoneNumber;
             phone.PhoneType = model.PhoneType;
             phone.ContactID = model.ContactID;
-
             phonesService.Save(phone);
 
-            return RedirectToAction("List", new { ContactID = phone.ContactID});
+            return this.RedirectToAction(c => c.List(), new { ContactID = model.ContactID });
         }
 
         public ActionResult Delete(int? id)
         {
             if (!id.HasValue)
             {
-                return RedirectToAction("List", "Contacts");
+                return this.RedirectToAction<ContactsController>(c => c.List());
             }
 
             PhonesService phonesService = new PhonesService();
             int contactID = phonesService.GetContactID(id.Value);
             phonesService.Delete(id.Value);
 
-            return RedirectToAction("List", new { ContactID = contactID });
+            return this.RedirectToAction(c => c.List(), new { ContactID = contactID });
         }
     }
 }

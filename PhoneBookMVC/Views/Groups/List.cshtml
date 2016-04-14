@@ -11,7 +11,7 @@
     @Html.ActionLink("Create New", "Edit")
 </p>
 
-@using (Html.BeginForm("List", "Groups", FormMethod.Get))
+@using ((Html.BeginForm<GroupsController>(c => c.List(), FormMethod.Get)))
 {
     <div>
         <h5>Find by name:</h5>
@@ -31,7 +31,7 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Group Name", "List", "Groups", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder == "name_asc" ? "name_desc" : "name_asc" } }, null)
+                @(Html.ActionLink<GroupsController>("Group Name", c => c.List(), new { Search = Model.Search, SortOrder = Model.SortOrder == "name_asc" ? "name_desc" : "name_asc" }, null))
             </th>
             <th></th>
             <th></th>
@@ -44,9 +44,9 @@ else
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @(Html.ActionLink<GroupsController>("Edit", c => c.Edit(), new { id = item.ID })) |
                     <a class="showContacts" href="#">Show Contacts</a> |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    @(Html.ActionLink<GroupsController>("Delete", c => c.Delete(item.ID)))
                 </td>
 
                 <td style="display:none">
@@ -59,11 +59,11 @@ else
 
                             @foreach (var contact in @item.Contacts)
                             {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => contact.FirstName) </td>
-                                <td>@Html.DisplayFor(modelItem => contact.LastName)</td>
-                                <td><a href="#" data-contactID="@contact.ID" data-groupID="@item.ID" class="removeContact">Remove</a></td>
-                            </tr>
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => contact.FirstName) </td>
+                                    <td>@Html.DisplayFor(modelItem => contact.LastName)</td>
+                                    <td><a href="#" data-contactID="@contact.ID" data-groupID="@item.ID" class="removeContact">Remove</a></td>
+                                </tr>
                             }
 
                         </table>
@@ -75,12 +75,12 @@ else
         <br />
 
         <div>
-            @Html.PagedListPager(Model.Groups, page => Url.Action("List", new RouteValueDictionary { { "Page", page }, { "Search", Model.Search }, { "PageSize", Model.PageSize } }))
+            @Html.PagedListPager(Model.Groups, page => (@Url.Action<GroupsController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize})))
             Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
         </div>
 }
 
-@using (@Html.BeginForm("List", "Groups", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder }, { "PageSize", Model.PageSize } }, FormMethod.Get, new { @id = "pageSizeForm" }))
+@using (Html.BeginForm<GroupsController>(c => c.List(), FormMethod.Get, new { Search = Model.Search, SortOrder = Model.SortOrder, PageSize = Model.PageSize }, new { @id = "pageSizeForm" }))
 {
     <div>
         <p id="for-page-size">Items on page: </p>
@@ -95,12 +95,10 @@ else
 @section scripts{
     <script>
         $(document).ready(function () {
-            // for pagination
             $('#PageSize').change(function () {
                 $('#pageSizeForm').submit();
             });
 
-            // for showing contacts in each group
             $('.showContacts').click(function () {
                 $(this).parent().next().fadeToggle();
             });
@@ -113,9 +111,7 @@ else
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({ contactID: $(this).attr('data-contactID'), groupID: $(this).attr('data-groupID') }),
                     dataType: "json",
-                    success: function () {
-                        removedContact.remove();
-                    },
+                    success: function () { removedContact.remove(); },
                     error: function () { alert('error'); }
                 });
             });   

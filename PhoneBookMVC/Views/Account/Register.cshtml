@@ -56,7 +56,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="button" onclick="location.href='@Url.Action("Login", "Account")'" value="Back to Login" class="btn btn-default" />
+                <input type="button" onclick="location.href='@(Url.Action<AccountController>(c => c.Login()))'" value="Back to Login" class="btn btn-default" />
             </div>
         </div>
     </div>

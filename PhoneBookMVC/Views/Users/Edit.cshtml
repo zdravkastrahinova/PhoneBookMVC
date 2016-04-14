@@ -65,7 +65,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "List")
+    @(Html.ActionLink<UsersController>("Back to List", c => c.List()))
 </div>
 
 @section Scripts {

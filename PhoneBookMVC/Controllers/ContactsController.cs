@@ -13,6 +13,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using System.Web.Mvc.Expressions;
 
 namespace PhoneBookMVC.Controllers
 {
@@ -58,7 +59,6 @@ namespace PhoneBookMVC.Controllers
             ContactsEditVM model = new ContactsEditVM();
             
             Contact contact;
-
             if (!id.HasValue)
             {
                 contact = new Contact();
@@ -69,7 +69,7 @@ namespace PhoneBookMVC.Controllers
                 contact = contactsService.GetByID(id.Value);
                 if (contact == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
             
@@ -93,8 +93,8 @@ namespace PhoneBookMVC.Controllers
 
             ContactsEditVM model = new ContactsEditVM();
             TryUpdateModel(model);
-            Contact contact;
 
+            Contact contact;
             if (model.ID == 0)
             {
                 contact = new Contact();
@@ -104,11 +104,10 @@ namespace PhoneBookMVC.Controllers
                 contact = contactsService.GetByID(model.ID);
                 if (contact == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
 
-            // upload picture
             if (model.ImageUpload != null && model.ImageUpload.ContentLength > 0)
             {
                 if (!model.ImageUpload.FileName.Contains(".jpg"))
@@ -137,14 +136,14 @@ namespace PhoneBookMVC.Controllers
             contactsService.UpdateContactGroups(contact, model.SelectedGroups);
             contactsService.Save(contact);
 
-            return RedirectToAction("List");
+            return this.RedirectToAction(c => c.List());
         }
 
         public ActionResult Delete(int? id)
         {
             if (!id.HasValue)
             {
-                return RedirectToAction("List");
+                return this.RedirectToAction(c => c.List());
             }
 
             UnitOfWork unitOfWork = new UnitOfWork();
@@ -153,7 +152,7 @@ namespace PhoneBookMVC.Controllers
             contactsService.GetByID(id.Value).Groups.Clear();
             contactsService.Delete(id.Value);
 
-            return RedirectToAction("List");
+            return this.RedirectToAction(c => c.List());
         }
 
         public JsonResult DeleteImage(int contactID)

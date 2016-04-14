@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Expressions;
 
 namespace PhoneBookMVC.Controllers
 {
@@ -40,20 +41,18 @@ namespace PhoneBookMVC.Controllers
                 return Redirect(model.RedirectUrl);
             }
 
-            return RedirectToAction("List", "Contacts");
+            return this.RedirectToAction<ContactsController>(c => c.List());
         }
 
         public ActionResult Logout()
         {
             AuthenticationService.Logout();
-
-            return RedirectToAction("Login");
+            return this.RedirectToAction(c => c.Login());
         }
 
         public ActionResult Register(string redirectUrl)
         {
             AccountRegisterVM model = new AccountRegisterVM();
-
             return View(model);
         }
 
@@ -67,7 +66,7 @@ namespace PhoneBookMVC.Controllers
 
             if (usersService.IsUserExsits(model))
             {
-                ModelState.AddModelError(String.Empty, "Username or Email is already taken");
+                ModelState.AddModelError(String.Empty, "Username or Email is already taken.");
             }
 
             if (!ModelState.IsValid)
@@ -82,7 +81,7 @@ namespace PhoneBookMVC.Controllers
             }
             else
             {
-                return RedirectToAction("Login");
+                return this.RedirectToAction( c => c.Login());
             }
 
             user.ID = model.ID;
@@ -111,8 +110,8 @@ namespace PhoneBookMVC.Controllers
             UsersService usersService = new UsersService();
             AccountConfirmVM model = new AccountConfirmVM();
             TryUpdateModel(model);
-            User user;
 
+            User user;
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -122,7 +121,7 @@ namespace PhoneBookMVC.Controllers
             user.Password = model.Password;
             usersService.Save(user);
 
-            return RedirectToAction("Login");
+            return this.RedirectToAction(c => c.Login());
         }
     }
 }

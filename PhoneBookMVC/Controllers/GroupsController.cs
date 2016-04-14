@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Expressions;
 
 namespace PhoneBookMVC.Controllers
 {
@@ -42,6 +43,7 @@ namespace PhoneBookMVC.Controllers
 
             int pageNumber = model.Page ?? 1;
             model.Groups = groups.ToPagedList(pageNumber, pageSize);
+
             return View(model);
         }
 
@@ -49,8 +51,8 @@ namespace PhoneBookMVC.Controllers
         {
             GroupsService groupsService = new GroupsService();
             GroupsEditVM model = new GroupsEditVM();
-            Group group;
 
+            Group group;
             if (!id.HasValue)
             {
                 group = new Group();
@@ -60,7 +62,7 @@ namespace PhoneBookMVC.Controllers
                 group = groupsService.GetByID(id.Value);
                 if (group == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
 
@@ -78,8 +80,8 @@ namespace PhoneBookMVC.Controllers
             GroupsService groupsService = new GroupsService();
             GroupsEditVM model = new GroupsEditVM();
             TryUpdateModel(model);
-            Group group;
 
+            Group group;
             if (model.ID == 0)
             {
                 group = new Group();
@@ -89,7 +91,7 @@ namespace PhoneBookMVC.Controllers
                 group = groupsService.GetByID(model.ID);
                 if (group == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
 
@@ -101,16 +103,16 @@ namespace PhoneBookMVC.Controllers
             group.ID = model.ID;
             group.Name = model.Name;
             group.UserID = AuthenticationService.LoggedUser.ID;
-
             groupsService.Save(group);
-            return RedirectToAction("List");
+
+            return this.RedirectToAction(c => c.List());
         }
 
         public ActionResult Delete(int? id)
         {
             if (!id.HasValue)
             {
-                return RedirectToAction("List");
+                return this.RedirectToAction(c => c.List());
             }
 
             UnitOfWork unitOfWork = new UnitOfWork();
@@ -119,7 +121,7 @@ namespace PhoneBookMVC.Controllers
             groupsService.GetByID(id.Value).Contacts.Clear();
             groupsService.Delete(id.Value);
 
-            return RedirectToAction("List");
+            return this.RedirectToAction(c => c.List());
         }
 
         public JsonResult Remove(int contactID, int groupID)

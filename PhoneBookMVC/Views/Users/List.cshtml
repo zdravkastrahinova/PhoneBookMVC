@@ -8,10 +8,10 @@
 <h3>@ViewBag.Title</h3>
 
 <p>
-    @Html.ActionLink("Create New", "Edit")
+    @(Html.ActionLink<UsersController>("Create New", c => c.Edit()))
 </p>
 
-@using (Html.BeginForm("List", "Users", FormMethod.Get))
+@using (Html.BeginForm<UsersController>(c => c.List(), FormMethod.Get))
 {
     <div>
         <h5>Find by name:</h5>
@@ -31,13 +31,13 @@ else
     <table class="table">
         <tr>
             <th>
-                @Html.ActionLink("Username", "List", "Users", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder == "username_asc" ? "username_desc" : "username_asc" } }, null)
+                @(Html.ActionLink<UsersController>("Username", c => c.List(), new { Search = Model.Search, SortOrder = Model.SortOrder == "username_asc" ? "username_desc" : "username_asc" }, null))
             </th>
             <th>
-                @Html.ActionLink("First Name", "List", "Users", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder == "fname_asc" ? "fname_desc" : "fname_asc" } }, null)
+                @(Html.ActionLink<UsersController>("First Name", c => c.List(), new { Search = Model.Search, SortOrder = Model.SortOrder == "fname_asc" ? "fname_desc" : "fname_asc" }, null))
             </th>
             <th>
-                @Html.ActionLink("Last Name", "List", "Users", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder == "lname_asc" ? "lname_desc" : "lname_asc" } }, null)
+                @(Html.ActionLink<UsersController>("Last Name", c => c.List(), new { Search = Model.Search, SortOrder = Model.SortOrder == "lname_asc" ? "lname_desc" : "lname_asc" }, null))
             </th>
             <th>Email</th>
             <th></th>
@@ -59,9 +59,9 @@ else
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ID }) |
-                    @Html.ActionLink("Show Contacts", "List", "Contacts", new { UserID = item.ID }, null)
+                    @(Html.ActionLink<UsersController>("Edit", c => c.Edit(), new { id = item.ID })) |
+                    @(Html.ActionLink<UsersController>("Delete", c => c.Delete(item.ID))) |
+                    @(Html.ActionLink<ContactsController>("Show Contacts", c => c.List(), new { ContactID = item.ID }, null))
                 </td>
             </tr>
         }
@@ -70,12 +70,12 @@ else
     <br />
 
     <div>
-        @Html.PagedListPager(Model.Users, page => Url.Action("List", new RouteValueDictionary { { "Page", page }, { "Search", Model.Search }, { "PageSize", Model.PageSize } }))
+        @Html.PagedListPager(Model.Users, page => (@Url.Action<UsersController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize })))
         Page @(Model.Users.PageCount < Model.Users.PageNumber ? 0 : Model.Users.PageNumber) of @Model.Users.PageCount
     </div>
 }
 
-@using (@Html.BeginForm("List", "Users", new RouteValueDictionary { { "Search", Model.Search }, { "SortOrder", Model.SortOrder }, { "PageSize", Model.PageSize } }, FormMethod.Get, new { @id = "pageSizeForm" }))
+@using (Html.BeginForm<UsersController>(c => c.List(), FormMethod.Get, new { Search = Model.Search, SortOrder = Model.SortOrder, PageSize = Model.PageSize }, new { @id = "pageSizeForm" }))
 {
     <div>
         <p id="for-page-size">Items on page: </p>

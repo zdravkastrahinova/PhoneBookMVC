@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Expressions;
 
 namespace PhoneBookMVC.Controllers
 {
@@ -54,8 +55,8 @@ namespace PhoneBookMVC.Controllers
         {
             UsersService usersService = new UsersService();
             UsersEditVM model = new UsersEditVM();
-            User user;
 
+            User user;
             if (!id.HasValue)
             {
                 user = new User();
@@ -65,7 +66,7 @@ namespace PhoneBookMVC.Controllers
                 user = usersService.GetByID(id.Value);
                 if (user == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
 
@@ -86,8 +87,8 @@ namespace PhoneBookMVC.Controllers
             UsersService usersService = new UsersService();
             UsersEditVM model = new UsersEditVM();
             TryUpdateModel(model);
-            User user;
 
+            User user;
             if (model.ID == 0)
             {
                 user = new User();
@@ -97,7 +98,7 @@ namespace PhoneBookMVC.Controllers
                 user = usersService.GetByID(model.ID);
                 if (user == null)
                 {
-                    return RedirectToAction("List");
+                    return this.RedirectToAction(c => c.List());
                 }
             }
 
@@ -112,23 +113,22 @@ namespace PhoneBookMVC.Controllers
             user.Email = model.Email;
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-
             usersService.Save(user);
 
-            return RedirectToAction("List");
+            return this.RedirectToAction(c => c.List());
         }
 
         public ActionResult Delete(int? id)
         {
             if (!id.HasValue)
             {
-                return RedirectToAction("List");
+                return this.RedirectToAction(c => c.List());
             }
 
             UsersService usersService = new UsersService();
             usersService.Delete(id.Value);
 
-            return RedirectToAction("List");
+            return this.RedirectToAction(c => c.List());
         }
     }
 }
