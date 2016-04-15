@@ -20,8 +20,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Users", "List", "Users")</li>*@
                     <li>@Html.ActionLink("Contacts", "List", "Contacts")</li>
+                    <li>@Html.ActionLink("Groups", "List", "Groups")</li>
+                    @if (PhoneBookMVC.Services.AuthenticationService.LoggedUser != null)
+                    {
+                        <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    }
                 </ul>
             </div>
         </div>

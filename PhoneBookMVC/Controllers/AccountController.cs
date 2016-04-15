@@ -1,4 +1,5 @@
-﻿using PhoneBookMVC.Models;
+﻿using PhoneBookMVC.Filters;
+using PhoneBookMVC.Models;
 using PhoneBookMVC.Services;
 using PhoneBookMVC.Services.ModelServices;
 using PhoneBookMVC.ViewModels.AccountVM;
@@ -13,6 +14,7 @@ namespace PhoneBookMVC.Controllers
 {
     public class AccountController : Controller
     {
+        [AuthorizeAccessFilter]
         public ActionResult Login(string redirectUrl)
         {
             AccountLoginVM model = new AccountLoginVM();
@@ -23,6 +25,7 @@ namespace PhoneBookMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeAccessFilter]
         public ActionResult Login()
         {
             AccountLoginVM model = new AccountLoginVM();
@@ -50,6 +53,7 @@ namespace PhoneBookMVC.Controllers
             return this.RedirectToAction(c => c.Login());
         }
 
+        [AuthorizeAccessFilter]
         public ActionResult Register(string redirectUrl)
         {
             AccountRegisterVM model = new AccountRegisterVM();
@@ -58,6 +62,7 @@ namespace PhoneBookMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeAccessFilter]
         public ActionResult Register()
         {
             UsersService usersService = new UsersService();
@@ -97,6 +102,7 @@ namespace PhoneBookMVC.Controllers
             return View("WaitForConfirmation");
         }
 
+        [AuthorizeAccessFilter]
         public ActionResult Confirm(int userID, string key)
         {
             AccountConfirmVM model = new AccountConfirmVM();
@@ -105,6 +111,7 @@ namespace PhoneBookMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AuthorizeAccessFilter]
         public ActionResult Confirm()
         {
             UsersService usersService = new UsersService();

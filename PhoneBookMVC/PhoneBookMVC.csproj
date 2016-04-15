@@ -179,6 +179,7 @@
     <Compile Include="Enums\PagerEnum.cs" />
     <Compile Include="Enums\PhoneTypeEnum.cs" />
     <Compile Include="Filters\AuthenticationFilter.cs" />
+    <Compile Include="Filters\AuthorizeAccessFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
