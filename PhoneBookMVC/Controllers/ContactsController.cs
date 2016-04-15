@@ -110,9 +110,9 @@ namespace PhoneBookMVC.Controllers
 
             if (model.ImageUpload != null && model.ImageUpload.ContentLength > 0)
             {
-                if (!model.ImageUpload.FileName.Contains(".jpg"))
+                if (!model.ImageUpload.FileName.Contains(".jpg") || !model.ImageUpload.FileName.Contains(".png"))
                 {
-                    ModelState.AddModelError(string.Empty, "Wrong image format");
+                    ModelState.AddModelError(string.Empty, "Wrong image format.");
                 }
 
                 string filePath = Server.MapPath("~/Uploads/");
