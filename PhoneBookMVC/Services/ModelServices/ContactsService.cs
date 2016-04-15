@@ -67,5 +67,23 @@ namespace PhoneBookMVC.Services.ModelServices
                 }
             }
         }
+
+        public IEnumerable<SelectListItem> GetSelectedCountries()
+        {
+            return new CountriesRepository().GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.ID.ToString()
+            });
+        }
+
+        public IEnumerable<SelectListItem> GetSelectedCities()
+        {
+            return new CitiesRepository().GetAll().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.ID.ToString()
+            });
+        }
     }
 }

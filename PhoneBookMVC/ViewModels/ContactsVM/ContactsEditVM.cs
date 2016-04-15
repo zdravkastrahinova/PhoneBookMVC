@@ -24,6 +24,7 @@ namespace PhoneBookMVC.ViewModels.ContactsVM
         public string LastName { get; set; }
 
         [Required(ErrorMessage ="Please input address. It is required!")]
+        [StringLength(70, MinimumLength = 2, ErrorMessage = "Address should contain between 3 and 70 characters.")]
         [RegularExpression(@"^[^<>()!@#%/^?&_|)*]+$", ErrorMessage ="Address can consisist only letters and digits.")]
         public string Address { get; set; }
 
@@ -33,6 +34,14 @@ namespace PhoneBookMVC.ViewModels.ContactsVM
         public string[] SelectedGroups { get; set; }
 
         public string ImagePath { get; set; }
-        public HttpPostedFileBase ImageUpload { get; set; } 
+        public HttpPostedFileBase ImageUpload { get; set; }
+
+        [Display(Name = "Country")]
+        public int CountryID { get; set; }
+        public IEnumerable<SelectListItem> Countries { get; set; }
+
+        [Display(Name = "City")]
+        public int CityID { get; set; }
+        public IEnumerable<SelectListItem> Cities { get; set; }
     }
 }

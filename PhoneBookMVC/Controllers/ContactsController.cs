@@ -79,6 +79,10 @@ namespace PhoneBookMVC.Controllers
             model.FirstName = contact.FirstName;
             model.LastName = contact.LastName;
             model.Address = contact.Address;
+            model.CityID = contact.CityID;
+
+            model.Countries = contactsService.GetSelectedCountries();
+            model.Cities = contactsService.GetSelectedCities();
             model.Groups = contactsService.GetSelectedGroups(contact.Groups);
 
             return View(model);
@@ -122,16 +126,20 @@ namespace PhoneBookMVC.Controllers
 
             if (!ModelState.IsValid)
             {
+                model.Countries = contactsService.GetSelectedCountries();
+                model.Cities = contactsService.GetSelectedCities();
                 model.Groups = contactsService.GetSelectedGroups(contact.Groups, model.SelectedGroups);
+
                 return View(model);
             }
 
             contact.ID = model.ID;
+            contact.UserID = AuthenticationService.LoggedUser.ID;
             contact.FirstName = model.FirstName;
             contact.LastName = model.LastName;
             contact.Address = model.Address;
-            contact.UserID = AuthenticationService.LoggedUser.ID;
             contact.ImagePath = model.ImagePath;
+            contact.CityID = model.CityID;
 
             contactsService.UpdateContactGroups(contact, model.SelectedGroups);
             contactsService.Save(contact);
