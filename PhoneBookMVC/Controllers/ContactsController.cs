@@ -62,7 +62,6 @@ namespace PhoneBookMVC.Controllers
             if (!id.HasValue)
             {
                 contact = new Contact();
-                contact.ImagePath = "default.jpg";
             }
             else
             {
@@ -80,7 +79,7 @@ namespace PhoneBookMVC.Controllers
             model.LastName = contact.LastName;
             model.Address = contact.Address;
             model.CityID = contact.CityID;
-
+            
             model.Countries = contactsService.GetSelectedCountries();
             model.Cities = contactsService.GetSelectedCities();
             model.Groups = contactsService.GetSelectedGroups(contact.Groups);
@@ -114,14 +113,18 @@ namespace PhoneBookMVC.Controllers
 
             if (model.ImageUpload != null && model.ImageUpload.ContentLength > 0)
             {
-                if (!model.ImageUpload.FileName.Contains(".jpg") || !model.ImageUpload.FileName.Contains(".png"))
+                var imageExtension = Path.GetExtension(model.ImageUpload.FileName);
+
+                if (String.IsNullOrEmpty(imageExtension) || !imageExtension.Equals(".jpg", StringComparison.OrdinalIgnoreCase))
                 {
                     ModelState.AddModelError(string.Empty, "Wrong image format.");
                 }
-
-                string filePath = Server.MapPath("~/Uploads/");
-                model.ImagePath = model.ImageUpload.FileName;
-                model.ImageUpload.SaveAs(filePath + model.ImagePath);
+                else
+                {
+                    string filePath = Server.MapPath("~/Uploads/");
+                    model.ImagePath = model.ImageUpload.FileName;
+                    model.ImageUpload.SaveAs(filePath + model.ImagePath);
+                }              
             }
 
             if (!ModelState.IsValid)
@@ -172,6 +175,14 @@ namespace PhoneBookMVC.Controllers
             contactsService.Save(contact);
 
             return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ShowCities(int countryID)
+        {
+            ContactsService contactsService = new ContactsService();
+            List<SelectListItem> cities = contactsService.GetCitiesByCountryID(countryID).ToList();
+
+            return Json(cities.ToArray(), JsonRequestBehavior.AllowGet);
         }
     }
 }
