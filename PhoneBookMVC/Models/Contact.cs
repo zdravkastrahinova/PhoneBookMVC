@@ -7,6 +7,11 @@ namespace PhoneBookMVC.Models
 {
     public class Contact : BaseModel
     {
+        public Contact()
+        {
+            ImagePath = "default.jpg";
+        }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
