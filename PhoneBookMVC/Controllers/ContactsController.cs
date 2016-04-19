@@ -61,7 +61,8 @@ namespace PhoneBookMVC.Controllers
             Contact contact;
             if (!id.HasValue)
             {
-                contact = new Contact();
+                contact = new Contact();              
+                model.CountryID = int.Parse(contactsService.GetSelectedCountries().FirstOrDefault().Value);
             }
             else
             {
@@ -70,6 +71,8 @@ namespace PhoneBookMVC.Controllers
                 {
                     return this.RedirectToAction(c => c.List());
                 }
+
+                model.CountryID = contact.City.CountryID;              
             }
             
             model.ID = contact.ID;
@@ -78,10 +81,10 @@ namespace PhoneBookMVC.Controllers
             model.FirstName = contact.FirstName;
             model.LastName = contact.LastName;
             model.Address = contact.Address;
-            model.CityID = contact.CityID;
-            
+            model.CityID = contact.CityID;          
+
             model.Countries = contactsService.GetSelectedCountries();
-            model.Cities = contactsService.GetSelectedCities();
+            model.Cities = contactsService.GetCitiesByCountryID(model.CountryID);
             model.Groups = contactsService.GetSelectedGroups(contact.Groups);
 
             return View(model);
