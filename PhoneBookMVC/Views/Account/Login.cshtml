@@ -34,6 +34,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBoxFor(model => model.IsRemembered, new { @class = "checkBox" })
+                @Html.LabelFor(model => model.IsRemembered, new { @class = "" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Login" class="btn btn-default" />
             </div>
         </div>

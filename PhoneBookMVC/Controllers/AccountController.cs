@@ -39,6 +39,11 @@ namespace PhoneBookMVC.Controllers
                 return View(model);
             }
 
+            if (model.IsRemembered)
+            {
+                CookieService.CreateCookie();
+            }
+
             if (!String.IsNullOrEmpty(model.RedirectUrl))
             {
                 return Redirect(model.RedirectUrl);
