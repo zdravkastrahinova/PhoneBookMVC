@@ -1,4 +1,5 @@
-﻿using PagedList;
+﻿using AutoMapper;
+using PagedList;
 using PhoneBookMVC.Models;
 using PhoneBookMVC.Repositories;
 using PhoneBookMVC.Services;
@@ -35,7 +36,7 @@ namespace PhoneBookMVC.Controllers
                 default: groups = groups.OrderBy(g => g.Name).ToList(); break;
             }
 
-            int pageSize = 2;
+            int pageSize = 3;
             if (model.PageSize != 0)
             {
                 pageSize = model.PageSize;
@@ -66,9 +67,7 @@ namespace PhoneBookMVC.Controllers
                 }
             }
 
-            model.ID = group.ID;
-            model.Name = group.Name;
-            model.UserID = group.UserID;
+            Mapper.Map(group, model);
 
             return View(model);
         }
@@ -100,9 +99,9 @@ namespace PhoneBookMVC.Controllers
                 return View(model);
             }
 
-            group.ID = model.ID;
-            group.Name = model.Name;
+            Mapper.Map(model, group);
             group.UserID = AuthenticationService.LoggedUser.ID;
+
             groupsService.Save(group);
 
             return this.RedirectToAction(c => c.List());

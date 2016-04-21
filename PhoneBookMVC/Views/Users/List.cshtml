@@ -1,5 +1,4 @@
 ﻿@model PhoneBookMVC.ViewModels.UsersVM.UsersListVM
-@using PagedList.Mvc
 
 @{
     ViewBag.Title = "List Users";
@@ -80,7 +79,7 @@ else
     <div>
         <p id="for-page-size">Items on page: </p>
         @Html.DropDownListFor(model => model.PageSize, new SelectList(new List<SelectListItem> {
-                 new SelectListItem { Text = "2", Value = "2"},
+                 new SelectListItem { Text = "3", Value = "3"},
                  new SelectListItem { Text = "5", Value = "5"},
                  new SelectListItem { Text = "10", Value = "10"}
              }, "Value", "Text"), new { @class = "form-control" })

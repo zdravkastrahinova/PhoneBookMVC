@@ -1,4 +1,5 @@
-﻿using PagedList;
+﻿using AutoMapper;
+using PagedList;
 using PagedList.Mvc;
 using PhoneBookMVC.Filters;
 using PhoneBookMVC.Models;
@@ -39,7 +40,7 @@ namespace PhoneBookMVC.Controllers
                 default: users = users.OrderBy(u => u.Username).ToList(); break;
             }
 
-            int pageSize = 2;
+            int pageSize = 3;
             if (model.PageSize != 0)
             {
                 pageSize = model.PageSize;
@@ -70,12 +71,7 @@ namespace PhoneBookMVC.Controllers
                 }
             }
 
-            model.ID = user.ID;
-            model.Username = user.Username;
-            model.Password = user.Password;
-            model.Email = user.Email;
-            model.FirstName = user.FirstName;
-            model.LastName = user.LastName;
+            Mapper.Map(user, model);
 
             return View(model);
         }
@@ -107,12 +103,8 @@ namespace PhoneBookMVC.Controllers
                 return View(model);
             }
 
-            user.ID = model.ID;
-            user.Username = model.Username;
-            user.Password = model.Password;
-            user.Email = model.Email;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
+            Mapper.Map(model, user);
+
             usersService.Save(user);
 
             return this.RedirectToAction(c => c.List());

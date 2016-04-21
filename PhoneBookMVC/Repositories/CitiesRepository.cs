@@ -9,6 +9,7 @@ namespace PhoneBookMVC.Repositories
     public class CitiesRepository : BaseRepository<City>
     {
         public CitiesRepository() : base() { }
+
         public CitiesRepository(UnitOfWork unitOfWork) : base(unitOfWork) { }
     }
 }

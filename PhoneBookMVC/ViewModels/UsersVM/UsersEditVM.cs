@@ -20,7 +20,7 @@ namespace PhoneBookMVC.ViewModels.UsersVM
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Please input email. It is required!")]
-        [EmailAddress(ErrorMessage ="Email address is not correct.")]
+        [EmailAddress(ErrorMessage = "Email address is not correct.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please input first name. It is required!")]

@@ -14,7 +14,7 @@ namespace PhoneBookMVC.ViewModels.PhonesVM
 
         [Required(ErrorMessage = "Please input phone number. It is required!")]
         [Display(Name = "Phone Number")]
-        [RegularExpression(@"^[0-9]*$", ErrorMessage ="Phone number can consist only digits.")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage = "Phone number can consist only digits.")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Please select phone type. It is required!")]

@@ -37,6 +37,15 @@ namespace PhoneBookMVC.Services.ModelServices
             });
         }
 
+        public IEnumerable<SelectListItem> GetCitiesByCountryID(int countryID)
+        {
+            return new CitiesRepository().GetAll().Where(c => c.CountryID == countryID).ToList().Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.ID.ToString()
+            });
+        }
+
         public IEnumerable<SelectListItem> GetSelectedGroups(List<Group> groups, string[] selectedGroups = null)
         {
             if (groups == null)
@@ -79,15 +88,6 @@ namespace PhoneBookMVC.Services.ModelServices
                     contact.Groups.Add(group);
                 }
             }
-        }
-
-        public IEnumerable<SelectListItem> GetCitiesByCountryID(int countryID)
-        {
-            return new CitiesRepository().GetAll().Where(c => c.CountryID == countryID).ToList().Select(c => new SelectListItem
-            {
-                Text = c.Name,
-                Value = c.ID.ToString()
-            });
         }
     }
 }

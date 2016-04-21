@@ -1,4 +1,5 @@
-﻿using PhoneBookMVC.Filters;
+﻿using AutoMapper;
+using PhoneBookMVC.Filters;
 using PhoneBookMVC.Models;
 using PhoneBookMVC.Services;
 using PhoneBookMVC.Services.ModelServices;
@@ -91,15 +92,11 @@ namespace PhoneBookMVC.Controllers
             }
             else
             {
-                return this.RedirectToAction( c => c.Login());
+                return this.RedirectToAction(c => c.Login());
             }
 
-            user.ID = model.ID;
-            user.Username = model.Username;
+            Mapper.Map(model, user);
             user.Password = Guid.NewGuid().ToString();
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
 
             usersService.Save(user);
             EmailService.SendEmail(user);
@@ -131,6 +128,7 @@ namespace PhoneBookMVC.Controllers
 
             user = usersService.GetByID(model.UserID);
             user.Password = model.Password;
+
             usersService.Save(user);
 
             return this.RedirectToAction(c => c.Login());

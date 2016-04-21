@@ -8,7 +8,7 @@
 <h4>@Model.Contact.FirstName @Model.Contact.LastName</h4>
 
 <p>
-    @(Html.ActionLink<PhonesController>("Create New", c => c.Edit(), new { ContactID = Model.ContactID}))
+    @(Html.ActionLink<PhonesController>("Create New", c => c.Edit(), new { ContactID = Model.ContactID }))
 </p>
 
 @if (Model.Phones.Count == 0)

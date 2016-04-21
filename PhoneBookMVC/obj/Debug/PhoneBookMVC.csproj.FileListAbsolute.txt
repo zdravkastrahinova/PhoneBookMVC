@@ -121,3 +121,5 @@ C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\Newtonsoft.Json.xml
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\obj\Debug\PhoneBookMVC.dll
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\obj\Debug\PhoneBookMVC.pdb
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\obj\Debug\PhoneBookMVC.csprojResolveAssemblyReference.cache
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\AutoMapper.dll
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\AutoMapper.xml

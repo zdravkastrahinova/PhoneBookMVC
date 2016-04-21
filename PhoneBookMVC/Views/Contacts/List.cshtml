@@ -14,7 +14,7 @@
 @using (Html.BeginForm<ContactsController>(c => c.List(), FormMethod.Get))
 {
     <div>
-        <h5>Find by name:</h5> 
+        <h5>Find by name:</h5>
         <p>
             @Html.TextBoxFor(model => model.Search, new { @class = "form-control" })
             <input type="submit" value="Search" class="btn btn-default" id="search-submit" />
@@ -50,8 +50,8 @@ else
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.City.Country.Name), 
-                    @Html.DisplayFor(modelItem => item.City.Name), 
+                    @Html.DisplayFor(modelItem => item.City.Country.Name),
+                    @Html.DisplayFor(modelItem => item.City.Name),
                     @Html.DisplayFor(modelItem => item.Address)
                 </td>
                 <td>
@@ -65,9 +65,9 @@ else
     </table>
     <br />
 
-    <div >
-         @Html.PagedListPager(Model.Contacts, page => (@Url.Action<ContactsController>(c => c.List(), new { Page = page,  Search = Model.Search, PageSize = Model.PageSize })))
-         Page @(Model.Contacts.PageCount < Model.Contacts.PageNumber ? 0 : Model.Contacts.PageNumber) of @Model.Contacts.PageCount
+    <div>
+        @Html.PagedListPager(Model.Contacts, page => (@Url.Action<ContactsController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize })))
+        Page @(Model.Contacts.PageCount < Model.Contacts.PageNumber ? 0 : Model.Contacts.PageNumber) of @Model.Contacts.PageCount
     </div>
 }
 
@@ -76,12 +76,12 @@ else
     <div>
         <p id="for-page-size">Items on page: </p>
         @Html.DropDownListFor(model => model.PageSize, new SelectList(new List<SelectListItem> {
-                new SelectListItem { Text = "2", Value = "2"},
+                new SelectListItem { Text = "3", Value = "3"},
                 new SelectListItem { Text = "5", Value = "5"},
                 new SelectListItem { Text = "10", Value = "10"}
-            }, "Value", "Text"), new { @class = "form-control" })          
+            }, "Value", "Text"), new { @class = "form-control" })
     </div>
- }
+}
 
 @section scripts{
     <script>

@@ -41,7 +41,7 @@ namespace PhoneBookMVC.Services.ModelServices
                 this.baseRepo.Save(item);
                 this.unitOfWork.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.unitOfWork.RollBack();
             }
@@ -54,7 +54,7 @@ namespace PhoneBookMVC.Services.ModelServices
                 this.baseRepo.Delete(id);
                 this.unitOfWork.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.unitOfWork.RollBack();
             }

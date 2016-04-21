@@ -1,5 +1,4 @@
 ﻿@model PhoneBookMVC.ViewModels.GroupsVM.GroupsListVM
-@using PagedList.Mvc
 
 @{
     ViewBag.Title = "List Groups";
@@ -24,7 +23,7 @@
 
 @if (Model.Groups.Count == 0)
 {
-    <div class="alert alert-info">No Users Found</div>
+    <div class="alert alert-info">No Groups Found</div>
 }
 else
 {
@@ -50,12 +49,18 @@ else
                 </td>
 
                 <td style="display:none">
-                    <table class="table">
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th></th>
-                        </tr>
+                    @if (item.Contacts.Count == 0)
+                    {
+                        <div class="alert alert-info">No contacts in the group</div>
+                    }
+                    else
+                    {
+                        <table class="table">
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th></th>
+                            </tr>
 
                             @foreach (var contact in @item.Contacts)
                             {
@@ -67,17 +72,18 @@ else
                             }
 
                         </table>
-                    </td>
-                </tr>
+                    }
+                </td>
+            </tr>
         }
 
     </table>
-        <br />
+    <br />
 
-        <div>
-            @Html.PagedListPager(Model.Groups, page => (@Url.Action<GroupsController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize})))
-            Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
-        </div>
+    <div>
+        @Html.PagedListPager(Model.Groups, page => (@Url.Action<GroupsController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize })))
+        Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
+    </div>
 }
 
 @using (Html.BeginForm<GroupsController>(c => c.List(), FormMethod.Get, new { Search = Model.Search, SortOrder = Model.SortOrder, PageSize = Model.PageSize }, new { @id = "pageSizeForm" }))
@@ -85,7 +91,7 @@ else
     <div>
         <p id="for-page-size">Items on page: </p>
         @Html.DropDownListFor(model => model.PageSize, new SelectList(new List<SelectListItem> {
-                 new SelectListItem { Text = "2", Value = "2"},
+                 new SelectListItem { Text = "3", Value = "3"},
                  new SelectListItem { Text = "5", Value = "5"},
                  new SelectListItem { Text = "10", Value = "10"}
              }, "Value", "Text"), new { @class = "form-control" })
@@ -114,7 +120,7 @@ else
                     success: function () { removedContact.remove(); },
                     error: function () { alert('error'); }
                 });
-            });   
+            });
         });
     </script>
 }

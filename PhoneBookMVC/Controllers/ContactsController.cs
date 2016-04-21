@@ -1,4 +1,5 @@
-﻿using PagedList;
+﻿using AutoMapper;
+using PagedList;
 using PagedList.Mvc;
 using PhoneBookMVC.Filters;
 using PhoneBookMVC.Models;
@@ -14,6 +15,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Mvc.Expressions;
+
 
 namespace PhoneBookMVC.Controllers
 {
@@ -32,7 +34,7 @@ namespace PhoneBookMVC.Controllers
                 contacts = contacts.Where(c => c.FirstName.ToLower().Contains(model.Search.ToLower()) || c.LastName.ToLower().Contains(model.Search.ToLower())).ToList();
             }
 
-            switch(model.SortOrder)
+            switch (model.SortOrder)
             {
                 case "lname_asc": contacts = contacts.OrderBy(c => c.LastName).ToList(); break;
                 case "lname_desc": contacts = contacts.OrderByDescending(c => c.LastName).ToList(); break;
@@ -41,7 +43,7 @@ namespace PhoneBookMVC.Controllers
                 default: contacts = contacts.OrderBy(c => c.FirstName).ToList(); break;
             }
 
-            int pageSize = 2;
+            int pageSize = 3;
             if (model.PageSize != 0)
             {
                 pageSize = model.PageSize;
@@ -57,11 +59,11 @@ namespace PhoneBookMVC.Controllers
         {
             ContactsService contactsService = new ContactsService();
             ContactsEditVM model = new ContactsEditVM();
-            
+
             Contact contact;
             if (!id.HasValue)
             {
-                contact = new Contact();              
+                contact = new Contact();
                 model.CountryID = int.Parse(contactsService.GetSelectedCountries().FirstOrDefault().Value);
             }
             else
@@ -71,17 +73,10 @@ namespace PhoneBookMVC.Controllers
                 {
                     return this.RedirectToAction(c => c.List());
                 }
-
-                model.CountryID = contact.City.CountryID;              
+                model.CountryID = contact.City.CountryID;
             }
-            
-            model.ID = contact.ID;
-            model.UserID = contact.UserID;
-            model.ImagePath = contact.ImagePath;
-            model.FirstName = contact.FirstName;
-            model.LastName = contact.LastName;
-            model.Address = contact.Address;
-            model.CityID = contact.CityID;          
+
+            Mapper.Map(contact, model);
 
             model.Countries = contactsService.GetSelectedCountries();
             model.Cities = contactsService.GetCitiesByCountryID(model.CountryID);
@@ -127,7 +122,7 @@ namespace PhoneBookMVC.Controllers
                     string filePath = Server.MapPath("~/Uploads/");
                     model.ImagePath = model.ImageUpload.FileName;
                     model.ImageUpload.SaveAs(filePath + model.ImagePath);
-                }              
+                }
             }
 
             if (!ModelState.IsValid)
@@ -139,13 +134,8 @@ namespace PhoneBookMVC.Controllers
                 return View(model);
             }
 
-            contact.ID = model.ID;
+            Mapper.Map(model, contact);
             contact.UserID = AuthenticationService.LoggedUser.ID;
-            contact.FirstName = model.FirstName;
-            contact.LastName = model.LastName;
-            contact.Address = model.Address;
-            contact.ImagePath = model.ImagePath;
-            contact.CityID = model.CityID;
 
             contactsService.UpdateContactGroups(contact, model.SelectedGroups);
             contactsService.Save(contact);

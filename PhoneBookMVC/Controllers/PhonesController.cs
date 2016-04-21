@@ -1,4 +1,5 @@
-﻿using PhoneBookMVC.Filters;
+﻿using AutoMapper;
+using PhoneBookMVC.Filters;
 using PhoneBookMVC.Models;
 using PhoneBookMVC.Services.ModelServices;
 using PhoneBookMVC.ViewModels.PhonesVM;
@@ -51,9 +52,7 @@ namespace PhoneBookMVC.Controllers
                 model.ContactID = phone.ContactID;
             }
 
-            model.ID = phone.ID;
-            model.PhoneNumber = phone.PhoneNumber;
-            model.PhoneType = phone.PhoneType;
+            Mapper.Map(phone, model);
 
             return View(model);
         }
@@ -90,10 +89,8 @@ namespace PhoneBookMVC.Controllers
                 return View(model);
             }
 
-            phone.ID = model.ID;
-            phone.PhoneNumber = model.PhoneNumber;
-            phone.PhoneType = model.PhoneType;
-            phone.ContactID = model.ContactID;
+            Mapper.Map(model, phone);
+
             phonesService.Save(phone);
 
             return this.RedirectToAction(c => c.List(), new { ContactID = model.ContactID });
@@ -108,6 +105,7 @@ namespace PhoneBookMVC.Controllers
 
             PhonesService phonesService = new PhonesService();
             int contactID = phonesService.GetContactID(id.Value);
+
             phonesService.Delete(id.Value);
 
             return this.RedirectToAction(c => c.List(), new { ContactID = contactID });

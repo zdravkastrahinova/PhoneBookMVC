@@ -37,8 +37,10 @@ namespace PhoneBookMVC.Services
 
             UsersService usersService = new UsersService();
             User user = usersService.GetByID(AuthenticationService.LoggedUser.ID);
+
             user.RememberMeHash = null;
             user.RememberMeExpiryDate = null;
+
             usersService.Save(user);
         }
     }

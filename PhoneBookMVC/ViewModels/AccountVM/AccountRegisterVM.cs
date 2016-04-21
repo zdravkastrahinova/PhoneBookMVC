@@ -15,10 +15,6 @@ namespace PhoneBookMVC.ViewModels.AccountVM
         [RegularExpression(@"^([A-z -]+)$", ErrorMessage = "Username can consist only letters, spaces and dashes.")]
         public string Username { get; set; }
 
-        //[Required(ErrorMessage = "Please input password. It is required!")]
-        //[StringLength(70, MinimumLength = 3, ErrorMessage = "Password should contain between 3 and 70 characters.")]
-        public string Password { get; set; }
-
         [Required(ErrorMessage = "Please input email. It is required!")]
         [EmailAddress(ErrorMessage = "Email address is not correct.")]
         public string Email { get; set; }
