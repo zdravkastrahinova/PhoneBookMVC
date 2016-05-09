@@ -22,7 +22,7 @@ namespace PhoneBookMVC.Controllers
             GroupsListVM model = new GroupsListVM();
             TryUpdateModel(model);
 
-            List<Group> groups = groupsService.GetAll();
+            List<Group> groups = groupsService.GetAll().Where(g => g.UserID == AuthenticationManager.LoggedUser.ID).ToList();
 
             if (!String.IsNullOrEmpty(model.Search))
             {
@@ -100,7 +100,7 @@ namespace PhoneBookMVC.Controllers
             }
 
             Mapper.Map(model, group);
-            group.UserID = AuthenticationService.LoggedUser.ID;
+            group.UserID = AuthenticationManager.LoggedUser.ID;
 
             groupsService.Save(group);
 

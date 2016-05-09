@@ -7,26 +7,20 @@ using System.Web;
 
 namespace PhoneBookMVC.Services
 {
-    public static class AuthenticationService
+    public class AuthenticationService
     {
-        public static User LoggedUser { get; set; }
+        public User CurrentUser { get; set; }
 
-        public static void AuthenticateUser(string username, string password)
+        public void AuthenticateUser(string username, string password)
         {
             UsersRepository usersRepo = new UsersRepository();
-            LoggedUser = usersRepo.GetAll().FirstOrDefault(u => u.Username == username && u.Password == password);
+            CurrentUser = usersRepo.GetAll().FirstOrDefault(u => u.Username == username && u.Password == password);
         }
 
-        public static void AuthenticateUserByCookie(HttpCookie cookie)
+        public void AuthenticateByCookie(HttpCookie cookie)
         {
             UsersRepository usersRepo = new UsersRepository();
-            LoggedUser = usersRepo.GetAll().FirstOrDefault(u => u.RememberMeHash == cookie.Value);
-        }
-
-        public static void Logout()
-        {
-            CookieService.DeleteCookie();
-            AuthenticateUser(null, null);
+            CurrentUser = usersRepo.GetAll().FirstOrDefault(u => u.RememberMeHash == cookie.Value);
         }
     }
 }

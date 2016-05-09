@@ -32,9 +32,9 @@ namespace PhoneBookMVC.Controllers
             AccountLoginVM model = new AccountLoginVM();
             TryUpdateModel(model);
 
-            AuthenticationService.AuthenticateUser(model.Username, model.Password);
+            AuthenticationManager.AuthenticateUser(model.Username, model.Password);
 
-            if (AuthenticationService.LoggedUser == null)
+            if (AuthenticationManager.LoggedUser == null)
             {
                 ModelState.AddModelError(String.Empty, "Invalid username or password.");
                 return View(model);
@@ -55,7 +55,7 @@ namespace PhoneBookMVC.Controllers
 
         public ActionResult Logout()
         {
-            AuthenticationService.Logout();
+            AuthenticationManager.Logout();
             return this.RedirectToAction(c => c.Login());
         }
 

@@ -13,7 +13,7 @@ namespace PhoneBookMVC.Services
         public static void CreateCookie()
         {
             UsersService usersService = new UsersService();
-            User user = usersService.GetByID(AuthenticationService.LoggedUser.ID);
+            User user = usersService.GetByID(AuthenticationManager.LoggedUser.ID);
 
             if (user != null)
             {
@@ -36,7 +36,7 @@ namespace PhoneBookMVC.Services
             HttpContext.Current.Response.Cookies.Set(cookie);
 
             UsersService usersService = new UsersService();
-            User user = usersService.GetByID(AuthenticationService.LoggedUser.ID);
+            User user = usersService.GetByID(AuthenticationManager.LoggedUser.ID);
 
             user.RememberMeHash = null;
             user.RememberMeExpiryDate = null;

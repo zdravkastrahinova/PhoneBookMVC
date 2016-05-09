@@ -207,6 +207,7 @@
     <Compile Include="Repositories\PhonesRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
+    <Compile Include="Services\AuthenticationManager.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\CookieService.cs" />
     <Compile Include="Services\EmailService.cs" />
