@@ -10,10 +10,10 @@ namespace PhoneBookMVC.ViewModels.GroupsVM
     {
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "Please input first name. It is required!")]
+        [Required(ErrorMessage = "Please input group name. It is required!")]
         [Display(Name = "Name")]
-        [StringLength(70, MinimumLength = 3, ErrorMessage = "Name should contain between 3 and 70 characters.")]
-        [RegularExpression(@"^([A-z]+)$", ErrorMessage = "Name can consist only letters.")]
+        [StringLength(70, MinimumLength = 3, ErrorMessage = "Group name should contain between 3 and 70 characters.")]
+        [RegularExpression(@"^([A-z]+)$", ErrorMessage = "Group name can consist only letters.")]
         public string Name { get; set; }
 
         public int UserID { get; set; }

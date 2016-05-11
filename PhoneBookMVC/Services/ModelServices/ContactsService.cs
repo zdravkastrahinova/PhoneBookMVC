@@ -60,7 +60,7 @@ namespace PhoneBookMVC.Services.ModelServices
                 selectedIds.AddRange(selectedGroups);
             }
 
-            return new GroupsRepository().GetAll().Select(g => new SelectListItem
+            return new GroupsRepository().GetAll().Where(g => g.UserID == AuthenticationManager.LoggedUser.ID).Select(g => new SelectListItem
             {
                 Text = g.Name,
                 Value = g.ID.ToString(),

@@ -30,8 +30,9 @@ namespace PhoneBookMVC.Controllers
             List<Contact> contacts = contactsService.GetAll().Where(c => c.UserID == AuthenticationManager.LoggedUser.ID).ToList();
 
             if (!String.IsNullOrEmpty(model.Search))
-            {
-                contacts = contacts.Where(c => c.FirstName.ToLower().Contains(model.Search.ToLower()) || c.LastName.ToLower().Contains(model.Search.ToLower())).ToList();
+            {            
+                model.Search = model.Search.Replace(" ", String.Empty);
+                contacts = contacts.Where(c => (c.FirstName + c.LastName).ToLower().Contains(model.Search.ToLower())).ToList();
             }
 
             switch (model.SortOrder)
@@ -128,7 +129,7 @@ namespace PhoneBookMVC.Controllers
             if (!ModelState.IsValid)
             {
                 model.Countries = contactsService.GetSelectedCountries();
-                model.Cities = contactsService.GetSelectedCities();
+                model.Cities = contactsService.GetCitiesByCountryID(model.CountryID);
                 model.Groups = contactsService.GetSelectedGroups(contact.Groups, model.SelectedGroups);
 
                 return View(model);
