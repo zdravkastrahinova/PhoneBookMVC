@@ -7,7 +7,7 @@
 <h3>@ViewBag.Title</h3>
 
 <p>
-    @Html.ActionLink("Create New", "Edit")
+    @(Html.ActionLink<GroupsController>("Create New", c => c.Edit()))
 </p>
 
 @using ((Html.BeginForm<GroupsController>(c => c.List(), FormMethod.Get)))
@@ -107,6 +107,12 @@ else
 
             $('.showContacts').click(function () {
                 $(this).parent().next().fadeToggle();
+                
+                if ($(this).text() == "Show Contacts") {
+                    $(this).text("Hide Contacts");
+                } else {
+                    $(this).text("Show Contacts");
+                }
             });
 
             $('.removeContact').click(function () {

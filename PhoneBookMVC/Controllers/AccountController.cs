@@ -122,17 +122,50 @@ namespace PhoneBookMVC.Controllers
             TryUpdateModel(model);
 
             User user;
+            user = usersService.GetByID(model.UserID);
+
+            if (user == null)
+            {
+                ModelState.AddModelError(String.Empty, "User not exist.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            user = usersService.GetByID(model.UserID);
             user.Password = model.Password;
-
             usersService.Save(user);
 
             return this.RedirectToAction(c => c.Login());
+        }
+
+        public ActionResult ResetPassword()
+        {
+            AccountResetPasswordVM model = new AccountResetPasswordVM();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(AccountResetPasswordVM model)
+        {
+            UsersService usersService = new UsersService();
+            TryUpdateModel(model);
+
+            User user = usersService.GetAll().FirstOrDefault(u => u.Email == model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError(String.Empty, "Invalid email address.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Task.Run(() => EmailService.SendEmail(user, ControllerContext));
+
+            return View("WaitForConfirmation");
         }
     }
 }

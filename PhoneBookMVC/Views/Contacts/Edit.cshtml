@@ -27,6 +27,7 @@
                     <img class="contact-photo" src="~/Uploads/@Model.ImagePath" alt="Image" />
                     <div class="col-md-10">
                         @Html.TextBoxFor(model => model.ImageUpload, new { htmlAttributes = new { @class = "form-control", @id = "image-upload" }, type = "file" })
+                        <label>You can upload images with .jpg extension</label>
                     </div>
                 </div>
             </div>
