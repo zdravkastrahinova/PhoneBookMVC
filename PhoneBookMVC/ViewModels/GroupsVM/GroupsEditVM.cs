@@ -11,9 +11,8 @@ namespace PhoneBookMVC.ViewModels.GroupsVM
         public int ID { get; set; }
 
         [Required(ErrorMessage = "Please input group name. It is required!")]
-        [Display(Name = "Name")]
         [StringLength(70, MinimumLength = 3, ErrorMessage = "Group name should contain between 3 and 70 characters.")]
-        [RegularExpression(@"^([A-z]+)$", ErrorMessage = "Group name can consist only letters.")]
+        [RegularExpression(@"^([A-z 0-9-_.])+$", ErrorMessage = "Group name cannot consist special shars.")]
         public string Name { get; set; }
 
         public int UserID { get; set; }

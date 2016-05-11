@@ -10,7 +10,7 @@ namespace PhoneBookMVC.ViewModels.AccountVM
     {
         [Required(ErrorMessage = "Please input username. It is required!")]
         [StringLength(70, MinimumLength = 3, ErrorMessage = "Username should contain between 3 and 70 characters.")]
-        [RegularExpression(@"^([A-z-_])+$", ErrorMessage = "Username can consist only letters, dashes and underscores. Spaces are not allowed!")]
+        [RegularExpression(@"^([A-z-_.])+$", ErrorMessage = "Username can consist only letters, dashes, underscores and fullstops. Spaces are not allowed!")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Please input password. It is required!")]

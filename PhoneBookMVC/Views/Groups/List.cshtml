@@ -44,8 +44,8 @@ else
                 </td>
                 <td>
                     @(Html.ActionLink<GroupsController>("Edit", c => c.Edit(), new { id = item.ID })) |
-                    <a class="showContacts" href="#">Show Contacts</a> |
-                    @(Html.ActionLink<GroupsController>("Delete", c => c.Delete(item.ID)))
+                    <a href="#" data-toggle="modal" data-target="#modal-delete-confirmation" data-url="/Groups/Delete/@item.ID" data-additionalInfo="@item.Name">Delete</a> |
+                    <a class="showContacts" href="#">Show Contacts</a>
                 </td>
 
                 <td style="display:none">
@@ -98,6 +98,10 @@ else
     </div>
 }
 
+@section FooterSection{
+    @Html.Partial("~/Views/Shared/PartialViews/_DeleteConfirmation.cshtml")
+}
+
 @section scripts{
     <script>
         $(document).ready(function () {
@@ -107,7 +111,7 @@ else
 
             $('.showContacts').click(function () {
                 $(this).parent().next().fadeToggle();
-                
+
                 if ($(this).text() == "Show Contacts") {
                     $(this).text("Hide Contacts");
                 } else {

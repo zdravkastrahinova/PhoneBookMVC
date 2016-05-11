@@ -56,7 +56,7 @@ else
                 </td>
                 <td>
                     @(Html.ActionLink<ContactsController>("Edit", c => c.Edit(), new { id = item.ID })) |
-                    @(Html.ActionLink<ContactsController>("Delete", c => c.Delete(item.ID))) |
+                    <a href="#" data-toggle="modal" data-target="#modal-delete-confirmation" data-url="/Contacts/Delete/@item.ID" data-additionalinfo="@item.FirstName @item.LastName">Delete</a> |
                     @(Html.ActionLink<PhonesController>("Show Phones", c => c.List(), new { ContactID = item.ID }, null))
                 </td>
             </tr>
@@ -81,6 +81,10 @@ else
                 new SelectListItem { Text = "10", Value = "10"}
             }, "Value", "Text"), new { @class = "form-control" })
     </div>
+}
+
+@section FooterSection {
+    @Html.Partial("~/Views/Shared/PartialViews/_DeleteConfirmation.cshtml")
 }
 
 @section scripts{
