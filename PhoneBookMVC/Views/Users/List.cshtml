@@ -60,7 +60,7 @@ else
                 <td>
                     @(Html.ActionLink<UsersController>("Edit", c => c.Edit(), new { id = item.ID })) |
                     <a href="#" data-toggle="modal" data-target="#modal-delete-confirmation" data-url="/Users/Delete/@item.ID" data-additionalInfo="@item.Username">Delete</a>
-                    @(Html.ActionLink<ContactsController>("Show Contacts", c => c.List(), new { ContactID = item.ID }, null))
+                    @*@(Html.ActionLink<ContactsController>("Show Contacts", c => c.List(), new { UserID = item.ID }, null))*@
                 </td>
             </tr>
         }

@@ -3,6 +3,7 @@ using PagedList;
 using PagedList.Mvc;
 using PhoneBookMVC.Filters;
 using PhoneBookMVC.Models;
+using PhoneBookMVC.Services;
 using PhoneBookMVC.Services.ModelServices;
 using PhoneBookMVC.ViewModels.UsersVM;
 using System;
@@ -22,7 +23,7 @@ namespace PhoneBookMVC.Controllers
             UsersListVM model = new UsersListVM();
             TryUpdateModel(model);
 
-            List<User> users = usersService.GetAll();
+            List<User> users = usersService.GetAll().Where(u => u.ID != AuthenticationManager.LoggedUser.ID).ToList();
 
             if (!String.IsNullOrEmpty(model.Search))
             {

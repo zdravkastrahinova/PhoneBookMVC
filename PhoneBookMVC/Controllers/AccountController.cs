@@ -150,9 +150,8 @@ namespace PhoneBookMVC.Controllers
         public ActionResult ResetPassword(AccountResetPasswordVM model)
         {
             UsersService usersService = new UsersService();
-            TryUpdateModel(model);
-
             User user = usersService.GetAll().FirstOrDefault(u => u.Email == model.Email);
+
             if (user == null)
             {
                 ModelState.AddModelError(String.Empty, "Invalid email address.");
