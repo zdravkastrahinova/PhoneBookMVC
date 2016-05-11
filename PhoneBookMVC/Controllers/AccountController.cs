@@ -7,6 +7,7 @@ using PhoneBookMVC.ViewModels.AccountVM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Expressions;
@@ -99,7 +100,7 @@ namespace PhoneBookMVC.Controllers
             user.Password = Guid.NewGuid().ToString();
 
             usersService.Save(user);
-            EmailService.SendEmail(user);
+            Task.Run(() => EmailService.SendEmail(user, ControllerContext));
 
             return View("WaitForConfirmation");
         }
