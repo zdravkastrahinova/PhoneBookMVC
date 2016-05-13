@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PagedList;
 using PhoneBookMVC.Models;
 using PhoneBookMVC.Repositories;
 using PhoneBookMVC.Services;
@@ -22,29 +21,26 @@ namespace PhoneBookMVC.Controllers
             GroupsListVM model = new GroupsListVM();
             TryUpdateModel(model);
 
-            List<Group> groups = groupsService.GetAll().Where(g => g.UserID == AuthenticationManager.LoggedUser.ID).ToList();
+            model.Groups = new Dictionary<Group, List<SelectListItem>>();
+
+            foreach (var group in groupsService.GetAll().Where(g => g.UserID == AuthenticationManager.LoggedUser.ID))
+            {
+                List<SelectListItem> contacts = groupsService.GetSelectedContacts(group).ToList();
+                model.Groups.Add(group, contacts);
+            }
 
             if (!String.IsNullOrEmpty(model.Search))
             {
-                groups = groups.Where(g => g.Name.ToLower().Contains(model.Search.ToLower())).ToList();
+                model.Groups = model.Groups.Where(g => g.Key.Name.ToLower().Contains(model.Search.ToLower())).ToDictionary(v => v.Key, v => v.Value);
             }
 
             switch (model.SortOrder)
             {
-                case "name_desc": groups = groups.OrderByDescending(g => g.Name).ToList(); break;
+                case "name_desc": model.Groups = model.Groups.OrderByDescending(g => g.Key.Name).ToDictionary(v => v.Key, v => v.Value); break;
                 case "name_asc":
-                default: groups = groups.OrderBy(g => g.Name).ToList(); break;
+                default: model.Groups = model.Groups.OrderBy(g => g.Key.Name).ToDictionary(v => v.Key, v => v.Value); break;
             }
-
-            int pageSize = 3;
-            if (model.PageSize != 0)
-            {
-                pageSize = model.PageSize;
-            }
-
-            int pageNumber = model.Page ?? 1;
-            model.Groups = groups.ToPagedList(pageNumber, pageSize);
-
+            
             return View(model);
         }
 
@@ -134,6 +130,37 @@ namespace PhoneBookMVC.Controllers
             groupsService.Save(group);
 
             return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Add(int[] contactIDs, int groupID)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            GroupsService groupsService = new GroupsService(unitOfWork);
+            
+            if (contactIDs == null)
+            {
+                contactIDs = new int[0];
+            }
+
+            Group group = groupsService.GetByID(groupID);
+            group.Contacts.Clear();
+
+            foreach (var id in contactIDs)
+            {
+                Contact contact = new ContactsService(unitOfWork).GetByID(id);
+                group.Contacts.Add(contact);
+            }
+
+            groupsService.Save(group);
+
+            var contacts = group.Contacts.Select(c => new
+            {
+                id = c.ID,
+                firstName = c.FirstName,
+                lastName = c.LastName
+            });
+
+           return Json(contacts, JsonRequestBehavior.AllowGet);
         }
     }
 }

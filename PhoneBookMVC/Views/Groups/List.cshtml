@@ -36,66 +36,52 @@ else
             <th></th>
         </tr>
 
-        @foreach (var item in Model.Groups)
+        @foreach (var group in Model.Groups)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => group.Key.Name)
                 </td>
                 <td>
-                    @(Html.ActionLink<GroupsController>("Edit", c => c.Edit(), new { id = item.ID })) |
-                    <a href="#" data-toggle="modal" data-target="#modal-delete-confirmation" data-url="/Groups/Delete/@item.ID" data-additionalInfo="@item.Name">Delete</a> |
+                    @(Html.ActionLink<GroupsController>("Edit", c => c.Edit(), new { id = group.Key.ID })) |
+                    <a href="#" data-toggle="modal" data-target="#modal-delete-confirmation" data-url="/Groups/Delete/@group.Key.ID" data-additionalInfo="@group.Key.Name">Delete</a> |
                     <a class="showContacts" href="#">Show Contacts</a>
                 </td>
 
                 <td style="display:none">
-                    @if (item.Contacts.Count == 0)
-                    {
-                        <div class="alert alert-info">No contacts in the group</div>
-                    }
-                    else
-                    {
-                        <table class="table">
+                    <table class="table" id="contactsTable">
+                        <thead>
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
-                                <th></th>
+                                <th>
+                                    <select class="selectContacts" name="character" multiple="multiple" data-groupID="@group.Key.ID">
+                                        @foreach (var contact in group.Value)
+                                        {
+                                            <option value="@contact.Value" @Html.Raw(contact.Selected ? "selected" : String.Empty) class="updateGroups" data-contactID="@contact.Value">@contact.Text</option>
+                                        }
+                                    </select>
+                                </th>
                             </tr>
+                        </thead>
 
-                            @foreach (var contact in @item.Contacts)
+                        <tbody>
+                            @foreach (var contact in group.Key.Contacts)
                             {
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => contact.FirstName) </td>
                                     <td>@Html.DisplayFor(modelItem => contact.LastName)</td>
-                                    <td><a href="#" data-contactID="@contact.ID" data-groupID="@item.ID" class="removeContact">Remove</a></td>
                                 </tr>
                             }
+                        </tbody>
 
-                        </table>
-                    }
+                    </table>
                 </td>
             </tr>
         }
 
     </table>
     <br />
-
-    <div>
-        @Html.PagedListPager(Model.Groups, page => (@Url.Action<GroupsController>(c => c.List(), new { Page = page, Search = Model.Search, PageSize = Model.PageSize })))
-        Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
-    </div>
-}
-
-@using (Html.BeginForm<GroupsController>(c => c.List(), FormMethod.Get, new { Search = Model.Search, SortOrder = Model.SortOrder, PageSize = Model.PageSize }, new { @id = "pageSizeForm" }))
-{
-    <div>
-        <p id="for-page-size">Items on page: </p>
-        @Html.DropDownListFor(model => model.PageSize, new SelectList(new List<SelectListItem> {
-                 new SelectListItem { Text = "3", Value = "3"},
-                 new SelectListItem { Text = "5", Value = "5"},
-                 new SelectListItem { Text = "10", Value = "10"}
-             }, "Value", "Text"), new { @class = "form-control" })
-    </div>
 }
 
 @section FooterSection{
@@ -105,8 +91,8 @@ else
 @section scripts{
     <script>
         $(document).ready(function () {
-            $('#PageSize').change(function () {
-                $('#pageSizeForm').submit();
+            $(function () {
+                $('.selectContacts').searchableOptionList();
             });
 
             $('.showContacts').click(function () {
@@ -119,18 +105,55 @@ else
                 }
             });
 
-            $('.removeContact').click(function () {
-                var removedContact = $(this).parent().parent();
+            $('.selectContacts').change(function () {
+                var selectedContacts = $(this).val();
+                var groupID = $(this).attr('data-groupID');
+                var tbody = $(this).parent().parent().parent().next();
+
                 $.ajax({
                     type: "Post",
-                    url: '@Url.Action("Remove", "Groups")',
+                    url: '@Url.Action("Add", "Groups")',
                     contentType: "application/json; charset=utf-8",
-                    data: JSON.stringify({ contactID: $(this).attr('data-contactID'), groupID: $(this).attr('data-groupID') }),
+                    data: JSON.stringify({ contactIDs: selectedContacts, groupID: groupID }),
                     dataType: "json",
-                    success: function () { removedContact.remove(); },
+                    success: function (contacts) {
+                        tbody.empty();
+                        var input = "";
+                        $.each(contacts, function (key, value) {
+                            input += "<tr>";
+                            input += "<td>" + value.firstName + "</td>";
+                            input += "<td>" + value.lastName + "</td>";
+                            input += "</tr>";
+                        });
+
+                        tbody.append(input);
+                        removeFromGroupEventListener();
+                    },
                     error: function () { alert('error'); }
                 });
             });
+
+            function removeFromGroupEventListener() {
+                $('.removeContact').click(function () {
+                    var removedContact = $(this).parent().parent();
+                    var contactID = $(this).attr('data-contactID');
+                    var groupID = $(this).attr('data-groupID')
+                    var thead = $(this).parent().parent().parent().prev();
+
+                    $.ajax({
+                        type: "Post",
+                        url: '@Url.Action("Remove", "Groups")',
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({ contactID: contactID, groupID: groupID }),
+                        dataType: "json",
+                        success: function () {
+                            removedContact.remove();
+                            $(thead).find('.sol-checkbox[value=' + contactID + ']').prop("checked", false);
+                        },
+                        error: function () { alert('error'); }
+                    });
+                });
+            }
         });
     </script>
 }
