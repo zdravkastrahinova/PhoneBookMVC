@@ -29,7 +29,7 @@ namespace PhoneBookMVC.Controllers
             List<Contact> contacts = contactsService.GetAll().Where(c => c.UserID == AuthenticationManager.LoggedUser.ID).ToList();
 
             if (!String.IsNullOrEmpty(model.Search))
-            {            
+            {
                 model.Search = model.Search.Replace(" ", String.Empty);
                 contacts = contacts.Where(c => (c.FirstName + c.LastName).ToLower().Contains(model.Search.ToLower())).ToList();
             }

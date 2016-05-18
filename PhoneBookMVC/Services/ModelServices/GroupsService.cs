@@ -18,7 +18,7 @@ namespace PhoneBookMVC.Services.ModelServices
         {
             List<string> selectedIds = group.Contacts.Select(c => c.ID.ToString()).ToList();
 
-            return new ContactsRepository().GetAll().Select(c => new SelectListItem
+            return new ContactsRepository().GetAll().Where(c => c.UserID == AuthenticationManager.LoggedUser.ID).Select(c => new SelectListItem
             {
                 Text = c.FirstName + " " + c.LastName,
                 Value = c.ID.ToString(),

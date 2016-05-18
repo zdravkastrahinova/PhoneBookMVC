@@ -21,16 +21,7 @@ namespace PhoneBookMVC.Services.ModelServices
 
         public IEnumerable<SelectListItem> GetSelectedCountries()
         {
-            return new CountriesRepository().GetAll().Select(c => new SelectListItem
-            {
-                Text = c.Name,
-                Value = c.ID.ToString()
-            });
-        }
-
-        public IEnumerable<SelectListItem> GetSelectedCities()
-        {
-            return new CitiesRepository().GetAll().Select(c => new SelectListItem
+            return new CountriesRepository().GetAll().OrderBy(c => c.Name).Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.ID.ToString()
@@ -39,7 +30,7 @@ namespace PhoneBookMVC.Services.ModelServices
 
         public IEnumerable<SelectListItem> GetCitiesByCountryID(int countryID)
         {
-            return new CitiesRepository().GetAll().Where(c => c.CountryID == countryID).ToList().Select(c => new SelectListItem
+            return new CitiesRepository().GetAll().OrderBy(c => c.Name).Where(c => c.CountryID == countryID).Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.ID.ToString()

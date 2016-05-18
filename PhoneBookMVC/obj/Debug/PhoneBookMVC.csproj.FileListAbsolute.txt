@@ -123,3 +123,7 @@ C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\obj\Debug\PhoneBookMVC.p
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\obj\Debug\PhoneBookMVC.csprojResolveAssemblyReference.cache
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\AutoMapper.dll
 C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\AutoMapper.xml
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\EntityFramework.BulkInsert.dll
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\EntityFramework.MappingAPI.dll
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\EntityFramework.BulkInsert.pdb
+C:\Users\Zdravka\Source\Repos\PhoneBookMVC\PhoneBookMVC\bin\EntityFramework.MappingAPI.pdb

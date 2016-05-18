@@ -1,4 +1,5 @@
-﻿using PhoneBookMVC.Models;
+﻿using EntityFramework.BulkInsert.Extensions;
+using PhoneBookMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -62,6 +63,12 @@ namespace PhoneBookMVC.Repositories
         public void Delete(int id)
         {
             this.dbSet.Remove(GetByID(id));
+            this.context.SaveChanges();
+        }
+
+        public void InsertCollection(List<T> items)
+        {
+            this.context.BulkInsert(items);
             this.context.SaveChanges();
         }
     }
