@@ -13,5 +13,7 @@ namespace PhoneBookMVC.ViewModels.AccountVM
         [Required(ErrorMessage = "Please input password. It is required!")]
         [StringLength(70, MinimumLength = 3, ErrorMessage = "Password should contain between 3 and 70 characters.")]
         public string Password { get; set; }
+
+        public string Key { get; set; }
     }
 }

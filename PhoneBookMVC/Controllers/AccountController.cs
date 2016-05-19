@@ -128,16 +128,29 @@ namespace PhoneBookMVC.Controllers
             {
                 ModelState.AddModelError(String.Empty, "User not exist.");
             }
+            else
+            {
+                if (user.Password == model.Key)
+                {
+                    user.Password = model.Password;
+                    usersService.Save(user);
+
+                    return this.RedirectToAction(c => c.Login());
+                }
+
+                Guid validKey;
+                if (user.Password != model.Key && !Guid.TryParse(model.Key, out validKey))
+                {
+                    return this.RedirectToAction(c => c.Confirm(user.ID, user.Password));
+                }              
+            }
 
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            user.Password = model.Password;
-            usersService.Save(user);
-
-            return this.RedirectToAction(c => c.Login());
+            return View("InactiveConfirmationLink");
         }
 
         public ActionResult ResetPassword()

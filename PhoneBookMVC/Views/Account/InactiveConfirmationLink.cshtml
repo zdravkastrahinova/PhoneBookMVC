@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "InactiveConfirmationLink";
+}
+
+<h3>Inactive Confirmation Link</h3>
+
+<p>Your confirmation link is not active because you have already confirmed your password.</p>
+<p>Click @(Html.ActionLink<AccountController>("here", c => c.ResetPassword())) in case you want to reset your password.</p>
+
+<h5>@(Html.ActionLink<AccountController>("Back to Login", c => c.Login()))</h5>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
